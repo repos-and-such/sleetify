@@ -4,6 +4,7 @@ const sqlService = require('../service/index');
 const CityWeatherType = new GraphQLObjectType({
   name: 'CityWeather',
   fields: () => ({
+    id: { type: GraphQLInt },
     city: { type: GraphQLString },
     temperature: { type: GraphQLFloat },
     windspeed: { type: GraphQLFloat },
@@ -21,7 +22,6 @@ const RootQuery = new GraphQLObjectType({
       async resolve(parent, args) {
         const res = await sqlService.fetchCitiesWeather(); 
         return res;
-        // return [{city:'Tartu', temperature: '23.1'}];
       }
     }
   }

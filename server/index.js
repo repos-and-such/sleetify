@@ -17,7 +17,7 @@ app.use('/graphql', graphqlHTTP({
 setInterval(async () => {
   const cities = await sqlService.fetchCityNames();
   cities.map(cityObject => refreshWeatherData(cityObject.city));
-}, 10000);
+}, 900000);
 
 const refreshWeatherData = async (city) => {
   try {
