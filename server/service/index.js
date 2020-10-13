@@ -1,10 +1,15 @@
 const pool = require('../db/index');
 
 class PostgreSQLService {
-  
-  async fetchCities() {
+
+  async fetchCityNames() {
     return await this.executeSQL('select city from city_weather');
   }
+
+  async fetchCitiesWeather() {
+    return await this.executeSQL('select * from city_weather');
+  };
+  
 
   async persistCityWeather(cityWeather) {
     const { city, temp, windSpeed, humidity, unixTime } = cityWeather;
@@ -12,7 +17,7 @@ class PostgreSQLService {
 
     return await this.executeSQL(
       `
-        insert into returning * city_weather (city, temperature, windspeed, humidity, unixtime) 
+        insert into city_weather (city, temperature, windspeed, humidity, unixtime) 
           values ($1, $2, $3, $4, $5) 
           on conflict (city) do update set temperature = $2, 
           windspeed = $3, humidity = $4, unixtime = $5 returning *
@@ -33,7 +38,6 @@ class PostgreSQLService {
       return err.stack;
     })
   }
-  
 }
 
-module.exports = PostgreSQLService;
+module.exports = new PostgreSQLService();

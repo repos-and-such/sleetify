@@ -1,16 +1,23 @@
 const express = require('express');
 const axios = require('axios');
-const PostgreSQLService = require('./service/index');
+const sqlService = require('./service/index');
+const { graphqlHTTP } = require('express-graphql');
+const schema = require('./graphql/schema');
+const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const sqlService = new PostgreSQLService();
+const PORT = process.env.PORT || 5001;
+
+app.use(cors());
+app.use('/graphql', graphqlHTTP({
+    schema,
+    graphiql: true
+}));
 
 setInterval(async () => {
-  const cities = await sqlService.fetchCities();
-
+  const cities = await sqlService.fetchCityNames();
   cities.map(cityObject => refreshWeatherData(cityObject.city));
-}, 2000);
+}, 10000);
 
 const refreshWeatherData = async (city) => {
   try {
@@ -19,7 +26,7 @@ const refreshWeatherData = async (city) => {
     if (name) {
       const cityWeather = { city: name, unixTime: dt, temp, windSpeed: speed, humidity };
       sqlService.persistCityWeather(cityWeather);
-  
+      console.log(cityWeather);
     }    
   } catch (err) {
     if (err.response.status === 404) {
