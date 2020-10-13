@@ -1,18 +1,17 @@
 const express = require('express')
 const axios = require('axios')
+const executePostgreSQL = require('./service/index')
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// mock cities
-const cities = ['Tallinn', 'Melbourne', 'Rome'];
-
-setInterval(() => {
-  cities.map(city => getWeatherData(city));
-}, 2000);
+setInterval(async () => {
+  const cities = await executePostgreSQL('select city from city_weather');
+  console.log(cities)
+  cities.map(cityObject => getWeatherData(cityObject.city));
+}, 4000);
 
 const getWeatherData = async (city) => {
-  console.log(city)
   try {
     const { data: { name, dt, main: { temp, humidity }, wind: { speed } } } = await axios.get(getWeatherApiPath(city));
     const cityWeatherData = { city: name, unixTime: dt, temp, windSpeed: speed, humidity };
