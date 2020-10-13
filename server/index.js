@@ -1,25 +1,32 @@
-const express = require('express')
-const axios = require('axios')
-const executePostgreSQL = require('./service/index')
+const express = require('express');
+const axios = require('axios');
+const PostgreSQLService = require('./service/index');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const sqlService = new PostgreSQLService();
 
 setInterval(async () => {
-  const cities = await executePostgreSQL('select city from city_weather');
-  console.log(cities)
-  cities.map(cityObject => getWeatherData(cityObject.city));
-}, 4000);
+  const cities = await sqlService.fetchCities();
 
-const getWeatherData = async (city) => {
+  cities.map(cityObject => refreshWeatherData(cityObject.city));
+}, 2000);
+
+const refreshWeatherData = async (city) => {
   try {
-    const { data: { name, dt, main: { temp, humidity }, wind: { speed } } } = await axios.get(getWeatherApiPath(city));
-    const cityWeatherData = { city: name, unixTime: dt, temp, windSpeed: speed, humidity };
-
-    console.log(cityWeatherData);
-    
+    const res = await axios.get(getWeatherApiPath(city));
+    const { data: { name, dt, main: { temp, humidity }, wind: { speed } } } = res;
+    if (name) {
+      const cityWeather = { city: name, unixTime: dt, temp, windSpeed: speed, humidity };
+      sqlService.persistCityWeather(cityWeather);
+  
+    }    
   } catch (err) {
-    console.log(err)
+    if (err.response.status === 404) {
+      console.error(`City not found: ${city}`);
+    } else {
+      console.error(err);
+    }
   }
 }
 
