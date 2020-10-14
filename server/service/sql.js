@@ -18,10 +18,20 @@ class PostgreSQLService {
     return await this.executeSQL(
       `
         insert into city_weather (city, temperature, windspeed, humidity, unixtime) 
-          values ($1, $2, $3, $4, $5) 
+          values (INITCAP($1), $2, $3, $4, $5) 
           on conflict (city) do update set temperature = $2, 
           windspeed = $3, humidity = $4, unixtime = $5 returning *
       `, params);
+  }
+
+  // async addCity(city) {
+  //   const params = [city];
+  //   return await this.executeSQL(`insert into city_weather (city) values (INITCAP($1)) returning city`, params);
+  // }
+
+  async deleteCity(city) {
+    const params = [city];
+    return await this.executeSQL(`delete from city_weather where city = (INITCAP($1)) returning city`, params);
   }
 
   async executeSQL(query, params) {

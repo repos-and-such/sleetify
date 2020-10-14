@@ -3,7 +3,7 @@ import axios from 'axios';
 import './App.css';
 
 function App() {
-  const fetchUrl = 'http://localhost:5001/graphql?query={cityWeather{id, city, temperature, windspeed, humidity, unixtime}}' 
+  const fetchUrl = '/graphql?query={cityWeather{id,city,temperature,windspeed,humidity,unixtime}}' 
   const [cityWeather, setCityWeather] = useState([]);
   useEffect(() => {
     (async function fetchData() {

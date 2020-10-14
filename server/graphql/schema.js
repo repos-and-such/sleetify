@@ -1,11 +1,12 @@
-const { GraphQLObjectType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLSchema, GraphQLString } = require("graphql");
-const sqlService = require('../service/index');
+const { GraphQLObjectType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLSchema, GraphQLString, GraphQLNonNull } = require("graphql");
+const sqlService = require('../service/sql');
+const citiesService = require('../service/cities');
 
 const CityWeatherType = new GraphQLObjectType({
   name: 'CityWeather',
   fields: () => ({
-    id: { type: GraphQLInt },
-    city: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    city: { type: new GraphQLNonNull(GraphQLString) },
     temperature: { type: GraphQLFloat },
     windspeed: { type: GraphQLFloat },
     humidity: { type: GraphQLFloat },
@@ -27,6 +28,43 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addCity: {
+      type: GraphQLString,
+      args: {
+        city: {type: new GraphQLNonNull(GraphQLString)}
+      },
+      async resolve(parent, args) {
+        const res = await citiesService.refreshCity(args.city);
+        console.log(res);
+
+        if (Array.isArray(res) && res[0].city) {
+          citiesService.refreshAllCities();
+          return res[0].city
+        }
+        console.error(res);
+        return typeof res === 'string' ? res : 'Oops! Something went wrong.' ;
+      }
+    },
+    deleteCity: {
+      type: GraphQLString,
+      args: {
+        city: {type: new GraphQLNonNull(GraphQLString)}
+      },
+      async resolve(parent, args) {
+        const res = await sqlService.deleteCity(args.city);
+        // siia if
+        citiesService.refreshAllCities();
+
+        return res[0] ? res[0].city : 'Nothing to delete here!';
+      }
+    }
+  }
+});
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
