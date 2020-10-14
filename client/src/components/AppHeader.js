@@ -10,10 +10,12 @@ export default function AppHeader({ emitAdd }) {
     if (!cityInput) return;
     const res = await apiService.addCity(cityInput);
     const { data: { data: { addCity } } } = res;
-    if ( addCity.includes('City not found')) {
-      console.error(addCity)
-    } else if (!res.data) {
+
+    console.log(res)
+    if (res.status !== 200) {
       console.error('Oops! Something went wrong...')
+    } else if ( addCity.includes('City not found')) {
+      console.error(addCity)
     } else {
       setCityInput('');
       window.location.reload(false);

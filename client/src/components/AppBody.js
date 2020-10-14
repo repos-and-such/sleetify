@@ -16,10 +16,8 @@ export default function AppBody() {
   }, []);
 
   const removeCity = (city) => {
-    const index = citiesWeather.find(cityObject => cityObject.city === city);
-    const splicedArray = citiesWeather.splice(index, 1);
-    console.log(splicedArray)
-    setCitiesWeather(splicedArray);
+    const filteredArray = citiesWeather.filter(cityObject => cityObject.city !== city);
+    setCitiesWeather(filteredArray);
   } 
 
   return (
