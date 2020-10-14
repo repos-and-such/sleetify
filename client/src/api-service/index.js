@@ -29,7 +29,14 @@ class ApiService {
       data: {
         query: 
           `mutation {
-            addCity(city: "${city}")
+            addCity(city: "${city}") {
+              id
+              city
+              temperature
+              humidity
+              windspeed
+              unixtime
+            }
           }`
        }      
     });

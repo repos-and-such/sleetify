@@ -1,32 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import './AppBody.css'
 import CityWeather from './CityWeather'
-import apiService from '../api-service/index'
 
-
-export default function AppBody() {
+export default function AppBody({ emitRemove, citiesWeather }) {
   
-  const [citiesWeather, setCitiesWeather] = useState([]);
-
-  useEffect(() => {
-    (async function fetchData() {
-      const res = await apiService.fetchCitiesWeather();
-      setCitiesWeather(res.data.data.citiesWeather);
-    })();
-  }, []);
-
-  const removeCity = (city) => {
-    const filteredArray = citiesWeather.filter(cityObject => cityObject.city !== city);
-    setCitiesWeather(filteredArray);
-  } 
-
   return (
     <div className="AppBody">
-      {citiesWeather.map(weather => (
+      {citiesWeather.map(cityWeather => (
         <CityWeather
-          key={weather.id}
-          cityWeather={weather}
-          emitRemove={(city) => removeCity(city)}
+          key={cityWeather.id}
+          cityWeather={cityWeather}
+          emitRemove={(city) => emitRemove(city)}
         />
       ))}
     </div>

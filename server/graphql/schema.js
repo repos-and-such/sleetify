@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLSchema, GraphQLString, GraphQLNonNull } = require("graphql");
+const { GraphQLObjectType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLSchema, GraphQLString, GraphQLNonNull, GraphQLScalarType } = require("graphql");
 const sqlService = require('../service/sql');
 const citiesService = require('../service/cities');
 
@@ -14,7 +14,6 @@ const CityWeatherType = new GraphQLObjectType({
   })
 })
 
-// Root Query
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
@@ -32,7 +31,7 @@ const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     addCity: {
-      type: GraphQLString,
+      type: GraphQLList(CityWeatherType),
       args: {
         city: {type: new GraphQLNonNull(GraphQLString)}
       },
@@ -41,10 +40,9 @@ const Mutation = new GraphQLObjectType({
 
         if (Array.isArray(res) && res[0].city) {
           citiesService.refreshAllCities();
-          return res[0].city;
+          return res;
         }
         console.error(res);
-        return typeof res === 'string' ? res : 'Oops! Something went wrong.' ;
       }
     },
     removeCity: {
