@@ -4,7 +4,7 @@ import InputField from './InputField'
 import './AppHeader.css'
 import apiService from '../api-service/index'
 
-export default function AppHeader() {
+export default function AppHeader({ emitAdd }) {
   const [cityInput, setCityInput] = useState('');
   const handleAddCity = async () => {
     if (!cityInput) return;
@@ -15,14 +15,16 @@ export default function AppHeader() {
     } else if ( !addCity ) {
       console.error('Oops! Something went wrong...')
     } else {
-      console.log('setting')
-      setCityInput('tere');
+      setCityInput('');
     }
   }
 
   return (
     <div className="AppHeader">
-      <InputField emitValue={(value) => setCityInput(value)} />
+      <InputField 
+        value={cityInput}
+        emitValue={(value) => setCityInput(value)} 
+      />
       <AddButton emitConfirm={() => handleAddCity()} />
     </div>
   )

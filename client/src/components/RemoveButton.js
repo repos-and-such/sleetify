@@ -6,7 +6,7 @@ export default function RemoveButton({ city, emitRemove }) {
   return (
     <button 
       onClick={() => emitRemove(city)}
-      // onClick={() => apiService.removeCity(city)}
+      onClick={() => apiService.removeCity(city)}
       className="RemoveButton"
     >
       Remove
