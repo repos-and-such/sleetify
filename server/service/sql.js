@@ -24,11 +24,6 @@ class PostgreSQLService {
       `, params);
   }
 
-  // async addCity(city) {
-  //   const params = [city];
-  //   return await this.executeSQL(`insert into city_weather (city) values (INITCAP($1)) returning city`, params);
-  // }
-
   async deleteCity(city) {
     const params = [city];
     return await this.executeSQL(`delete from city_weather where city = (INITCAP($1)) returning city`, params);

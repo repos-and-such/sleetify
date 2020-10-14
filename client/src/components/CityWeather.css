@@ -1,0 +1,10 @@
+.CityWeather {
+  padding: 0px 18px;
+  margin: 12px;
+  box-shadow: 2px 0px 6px gray;
+  background-color: white;
+}
+
+h2 {
+  font-size: 20px;
+}
