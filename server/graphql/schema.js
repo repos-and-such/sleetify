@@ -37,13 +37,11 @@ const Mutation = new GraphQLObjectType({
         city: {type: new GraphQLNonNull(GraphQLString)}
       },
       async resolve(parent, args) {
-        console.log(args.city)
         const res = await citiesService.refreshCity(args.city);
-        console.log(res);
 
         if (Array.isArray(res) && res[0].city) {
           citiesService.refreshAllCities();
-          return res[0].city
+          return res[0].city;
         }
         console.error(res);
         return typeof res === 'string' ? res : 'Oops! Something went wrong.' ;
@@ -56,7 +54,6 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(parent, args) {
         const res = await sqlService.removeCity(args.city);
-        // siia if
         citiesService.refreshAllCities();
 
         return res[0] ? res[0].city : 'Nothing to remove here!';

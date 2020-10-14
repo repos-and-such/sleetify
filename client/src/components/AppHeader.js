@@ -12,10 +12,11 @@ export default function AppHeader({ emitAdd }) {
     const { data: { data: { addCity } } } = res;
     if ( addCity.includes('City not found')) {
       console.error(addCity)
-    } else if ( !addCity ) {
+    } else if (!res.data) {
       console.error('Oops! Something went wrong...')
     } else {
       setCityInput('');
+      window.location.reload(false);
     }
   }
 

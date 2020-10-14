@@ -8,7 +8,7 @@ export default function CityWeather({ cityWeather: { city, temperature, windspee
     <div className="CityWeather">
       <div className="CityHeader">
         <h1>{city}</h1>
-        <RemoveButton city={city} emitRemove={(city) => console.log(city)} />
+        <RemoveButton city={city} emitRemove={(city) => emitRemove(city)} />
       </div>
       <h2>Temp: {temperature.toFixed(1)}°C</h2>
       <h2>Wind: {windspeed.toFixed(1)}m/s</h2>
