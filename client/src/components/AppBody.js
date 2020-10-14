@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import './AppBody.css'
-import CityWeather from './CityWeather';
+import CityWeather from './CityWeather'
+import apiService from '../api-service/index'
+
 
 export default function AppBody() {
-  const fetchUrl = '/graphql?query={cityWeather{id,city,temperature,windspeed,humidity,unixtime}}' 
-  const [cityWeather, setCityWeather] = useState([]);
+  
+  const [citiesWeather, setCitiesWeather] = useState([]);
 
   useEffect(() => {
     (async function fetchData() {
-      const res = await axios.get(fetchUrl);
-      setCityWeather(res.data.data.cityWeather);
+      const res = await apiService.fetchCitiesWeather();
+      setCitiesWeather(res.data.data.citiesWeather);
     })();
   }, []);
 
   return (
     <div className="AppBody">
-      {cityWeather.map(weather => (
-        <CityWeather 
+      {citiesWeather.map(weather => (
+        <CityWeather
           key={weather.id}
           cityWeather={weather}
+          emitRemove={(city) => console.log(city)}
         />
       ))}
     </div>

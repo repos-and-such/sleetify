@@ -1,3 +1,4 @@
 .AppBody {
   display: flex;
+  flex-wrap: wrap;
 }

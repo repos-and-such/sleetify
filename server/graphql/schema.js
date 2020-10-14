@@ -18,7 +18,7 @@ const CityWeatherType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    cityWeather: {
+    citiesWeather: {
       type: new GraphQLList(CityWeatherType),
       async resolve(parent, args) {
         const res = await sqlService.fetchCitiesWeather(); 
@@ -37,6 +37,7 @@ const Mutation = new GraphQLObjectType({
         city: {type: new GraphQLNonNull(GraphQLString)}
       },
       async resolve(parent, args) {
+        console.log(args.city)
         const res = await citiesService.refreshCity(args.city);
         console.log(res);
 
@@ -48,17 +49,17 @@ const Mutation = new GraphQLObjectType({
         return typeof res === 'string' ? res : 'Oops! Something went wrong.' ;
       }
     },
-    deleteCity: {
+    removeCity: {
       type: GraphQLString,
       args: {
         city: {type: new GraphQLNonNull(GraphQLString)}
       },
       async resolve(parent, args) {
-        const res = await sqlService.deleteCity(args.city);
+        const res = await sqlService.removeCity(args.city);
         // siia if
         citiesService.refreshAllCities();
 
-        return res[0] ? res[0].city : 'Nothing to delete here!';
+        return res[0] ? res[0].city : 'Nothing to remove here!';
       }
     }
   }

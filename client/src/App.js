@@ -1,7 +1,7 @@
-import React from 'react';
-import './App.css';
-import AppHeader from './components/AppHeader';
-import AppBody from './components/AppBody';
+import React from 'react'
+import './App.css'
+import AppHeader from './components/AppHeader'
+import AppBody from './components/AppBody'
 
 function App() {
   return (

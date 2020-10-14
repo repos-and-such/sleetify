@@ -24,7 +24,7 @@ class PostgreSQLService {
       `, params);
   }
 
-  async deleteCity(city) {
+  async removeCity(city) {
     const params = [city];
     return await this.executeSQL(`delete from city_weather where city = (INITCAP($1)) returning city`, params);
   }

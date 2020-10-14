@@ -12,7 +12,6 @@ class CitiesService {
     
   async refreshCity(city) {
     try {
-      console.log(city)
       const res = await axios.get(this.getWeatherApiPath(city));
       const { data: { name, dt, main: { temp, humidity }, wind: { speed } } } = res;
       if (name) {

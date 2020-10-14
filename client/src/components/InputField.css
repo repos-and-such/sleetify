@@ -1,0 +1,20 @@
+input {
+  margin: 3px 24px 3px 0px;
+  padding: 3px 8px;
+  font-size: 24px;
+  width: 28vw;
+  height: 32px;
+  border: 1px solid rgb(184, 184, 184);
+  box-shadow: 2px 0px 5px rgb(211, 210, 210);
+  font-family: "Montserrat";
+  overflow-y: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+input:focus {
+  outline: none !important;
+  background-color: white;
+  border: 1px solid rgb(226, 193, 174);
+  box-shadow: 0 0 4px 1px rgb(226, 193, 174);
+}
