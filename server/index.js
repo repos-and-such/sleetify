@@ -2,11 +2,12 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./graphql/schema');
 const cors = require('cors');
-const path = require('path');
+const root = require('path').join(__dirname, 'public')
 const citiesService = require('./service/cities');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
 app.use(cors());
 app.use(
   '/graphql',
@@ -16,10 +17,10 @@ app.use(
   })
 );
 
-app.use(express.static('public'));
+app.use(express.static(root));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+  res.sendFile('index.html', { root });
 })
 
 citiesService.refreshAllCities();
