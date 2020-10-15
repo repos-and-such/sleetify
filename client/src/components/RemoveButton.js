@@ -2,14 +2,15 @@ import React from 'react'
 import './RemoveButton.css'
 import apiService from '../api-service/index'
 
-export default function RemoveButton({ city, emitRemove }) {
+export default function RemoveButton({ city, emitRemove, emitError }) {
+
   const handleRemove = async () => {
-    const res = await apiService.removeCity(city);
-    if (res.status === 200) {
-      emitRemove(city);
-    } else {
-      console.error('Oops! Something went wrong...')
-    }
+    const { status, data: { data: { removeCity } } } = await apiService.removeCity(city);
+    if (status !== 200 || removeCity === 'DATABASE_ERROR') {
+      emitError('An error occurred while removing City'); 
+      return;
+    };
+    emitRemove(removeCity);
   } 
 
   return (

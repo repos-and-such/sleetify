@@ -2,8 +2,7 @@ import React from 'react'
 import './AppBody.css'
 import CityWeather from './CityWeather'
 
-export default function AppBody({ emitRemove, citiesWeather }) {
-  
+export default function AppBody({ emitRemove, emitError, citiesWeather }) {
   return (
     <div className="AppBody">
       {citiesWeather.map(cityWeather => (
@@ -11,6 +10,7 @@ export default function AppBody({ emitRemove, citiesWeather }) {
           key={cityWeather.id}
           cityWeather={cityWeather}
           emitRemove={(city) => emitRemove(city)}
+          emitError={(errorMessage) => emitError(errorMessage)}
         />
       ))}
     </div>

@@ -17,14 +17,13 @@ class CitiesService {
       if (name) {
         const cityWeather = { city: name, unixTime: dt, temp, windSpeed: speed, humidity };
         return await sqlService.persistCityWeather(cityWeather);
-      }    
+      }
     } catch (err) {
-      console.log(err)
+      console.error(err);
       if (err.response && err.response.status === 404) {
-        console.error(`City not found: ${city}`);
-        return `City not found: ${city}`;
+        return [{id: -1, city: `ERROR: City not found: ${city}`}];
       } else {
-        console.error(err);
+        return [{id: -1, city: `ERROR: A problem occurred while fetching City`}];
       }
     }
   }

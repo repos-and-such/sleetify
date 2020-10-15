@@ -20,8 +20,7 @@ const RootQuery = new GraphQLObjectType({
     citiesWeather: {
       type: new GraphQLList(CityWeatherType),
       async resolve(parent, args) {
-        const res = await sqlService.fetchCitiesWeather(); 
-        return res;
+        return await sqlService.fetchCitiesWeather();
       }
     }
   }
@@ -31,18 +30,14 @@ const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     addCity: {
-      type: GraphQLList(CityWeatherType),
+      type: CityWeatherType,
       args: {
         city: {type: new GraphQLNonNull(GraphQLString)}
       },
       async resolve(parent, args) {
         const res = await citiesService.refreshCity(args.city);
-
-        if (Array.isArray(res) && res[0].city) {
-          citiesService.refreshAllCities();
-          return res;
-        }
-        console.error(res);
+        // tagastab cityWeather objekti
+        return res[0];
       }
     },
     removeCity: {
@@ -51,10 +46,10 @@ const Mutation = new GraphQLObjectType({
         city: {type: new GraphQLNonNull(GraphQLString)}
       },
       async resolve(parent, args) {
-        const res = await sqlService.removeCity(args.city);
-        citiesService.refreshAllCities();
 
-        return res[0] ? res[0].city : 'Nothing to remove here!';
+        const res = await sqlService.removeCity(args.city);
+        // siin juba õige asi, aga mis kujul tagastada?
+        return Array.isArray(res) ? res[0].city : 'DATABASE_ERROR';
       }
     }
   }

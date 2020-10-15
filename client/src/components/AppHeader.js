@@ -4,18 +4,27 @@ import InputField from './InputField'
 import './AppHeader.css'
 import apiService from '../api-service/index'
 
-export default function AppHeader({ emitAdd }) {
+export default function AppHeader({ emitAdd, emitError }) {
+
   const [cityInput, setCityInput] = useState('');
+
   const handleAddCity = async () => {
     if (!cityInput) return;
-    const res = await apiService.addCity(cityInput);
-    const { data: { data: { addCity } } } = res;
 
-    if (res.status !== 200 || !addCity) {
-      console.error('Oops! Something went wrong...')
+    const res = await apiService.addCity(cityInput);
+
+    const { status, data: { errors } } = res;
+    if (status !== 200 || errors) {
+      emitError('An error occurred while adding City');
+      return;
+    }
+
+    const { data: { data: { addCity, addCity: { city } } } }  = res;
+    if (city.includes('ERROR:')) {
+      emitError(city);
     } else {
       setCityInput('');
-      emitAdd(addCity[0]);
+      emitAdd(addCity);
     }
   }
 

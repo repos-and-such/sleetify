@@ -7,11 +7,12 @@
   display: -webkit-flex;
   justify-content: center;
   align-items: center;
-  color: rgb(39, 110, 39);
+  color: rgb(93, 160, 93);
   background: transparent;
   cursor: pointer;
   font-size: 24px;
   box-shadow: 0px 0px 4px gray;
+  font-family: Montserrat;
 }
 
 .AddButton:focus {
