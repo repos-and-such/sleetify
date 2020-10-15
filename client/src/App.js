@@ -8,7 +8,7 @@ import apiService from './api-service/index'
 function App() {
     
   const [citiesWeather, setCitiesWeather] = useState([]);
-  const [activeError, setActiveError] = useState(false);
+  const [errorActive, setErrorActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState('An error occurred');
 
   useEffect(() => {
@@ -17,14 +17,16 @@ function App() {
       if (errors || !Array.isArray(citiesWeather)) {
         showError('An error occurred while fetching data');
       } else {
-        setCitiesWeather(citiesWeather);
+        setCitiesWeather(citiesWeather.sort((a,b) => {if (a.id > b.id) {return 1} else return -1}));
       }
     })();
   }, []);
 
   const addCity = (cityObject) => {
     if (citiesWeather.some(existingCityObject => existingCityObject.city === cityObject.city)) return;
-    setCitiesWeather([...citiesWeather, cityObject]);
+    const updatedArray = [...citiesWeather, cityObject];
+    updatedArray.sort((a,b) => {if (a.id > b.id) {return 1} else return -1});
+    setCitiesWeather(updatedArray);
   }
 
   const removeCity = (city) => {
@@ -34,15 +36,15 @@ function App() {
 
   const showError = (errorMessage) => {
     setErrorMessage(errorMessage);
-    setActiveError(true);
+    setErrorActive(true);
     setTimeout(() => {
-      setActiveError(false);
+      setErrorActive(false);
     }, 2000);
   }
 
   return (
     <div className="App">
-      { !activeError || <ErrorMessage message={errorMessage}/>}
+      { !errorActive || <ErrorMessage message={errorMessage}/>}
       <AppHeader 
         emitAdd={(cityObject) => addCity(cityObject)} 
         emitError={(errorMessage) => showError(errorMessage)}

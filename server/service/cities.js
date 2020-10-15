@@ -21,7 +21,7 @@ class CitiesService {
     } catch (err) {
       console.error(err);
       if (err.response && err.response.status === 404) {
-        return [{id: -1, city: `ERROR: City not found: ${city}`}];
+        return [{id: -1, city: `ERROR: City not found: "${city}"`}];
       } else {
         return [{id: -1, city: `ERROR: A problem occurred while fetching City`}];
       }

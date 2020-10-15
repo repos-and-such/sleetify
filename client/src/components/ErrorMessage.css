@@ -4,12 +4,12 @@
   justify-content: center;
   align-items: center;
   width: 80vh;
-  height: 50px;
+  min-height: 50px;
   padding: 18px;
   margin: 12px;
   box-shadow: 4px 0px 6px gray;
   background-color: rgb(119, 0, 0);
   color: white;
   font-size: 28px;
-
+  word-break: break-all;
 }

@@ -32,7 +32,8 @@ export default function AppHeader({ emitAdd, emitError }) {
     <div className="AppHeader">
       <InputField 
         value={cityInput}
-        emitValue={(value) => setCityInput(value)} 
+        emitValue={(value) => setCityInput(value)}
+        emitEnter={() => handleAddCity()}
       />
       <AddButton emitConfirm={() => handleAddCity()} />
     </div>
